@@ -1,6 +1,9 @@
 import React, { useRef, useState } from "react";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+
 import Header from "./Header";
 import { validateForm } from "../utils/validate";
+import { auth } from "../utils/firebase";
 
 const Login = () => {
 	const [isSignInForm, setIsSignInForm] = useState(true);
@@ -16,7 +19,6 @@ const Login = () => {
 
 	const submitClickHandler = (e) => {
 		e.preventDefault();
-		console.log(name, email);
 		const error = validateForm(
 			isSignInForm,
 			name?.current?.value,
@@ -24,10 +26,36 @@ const Login = () => {
 			password.current.value
 		);
 		setFormError(error);
-
 		if (error) return;
 
-		// Sign In / Sign Up
+		if (isSignInForm) {
+			// Sign In User
+			signInWithEmailAndPassword(auth, email.current.value, password.current.value)
+				.then((userCredential) => {
+					// Signed in
+					const user = userCredential.user;
+					console.log("USER", user);
+					// ...
+				})
+				.catch((error) => {
+					const errorCode = error.code;
+					const errorMessage = error.message;
+					setFormError(`${errorCode} - ${errorMessage}`);
+				});
+		} else {
+			// Sign Up user
+			createUserWithEmailAndPassword(auth, email.current.value, password.current.value)
+				.then((userCredential) => {
+					// Signed in
+					const user = userCredential.user;
+					console.log("USER", user);
+				})
+				.catch((error) => {
+					const errorCode = error.code;
+					const errorMessage = error.message;
+					setFormError(`${errorCode} - ${errorMessage}`);
+				});
+		}
 	};
 
 	return (
@@ -35,7 +63,7 @@ const Login = () => {
 			<Header />
 			<div>
 				<img
-					className="absolute"
+					className="absolute h-screen w-full"
 					src="https://assets.nflxext.com/ffe/siteui/vlv3/855ed6e2-d9f1-4afd-90da-96023ec747c3/85eb5b91-25ed-4965-ace9-ba8e4a0ead8d/IN-en-20230828-popsignuptwoweeks-perspective_alpha_website_large.jpg"
 					alt="background-img"
 				/>

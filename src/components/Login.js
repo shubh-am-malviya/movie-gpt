@@ -1,11 +1,33 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Header from "./Header";
+import { validateForm } from "../utils/validate";
 
 const Login = () => {
 	const [isSignInForm, setIsSignInForm] = useState(true);
+	const [formError, setFormError] = useState(null);
+
+	const name = useRef(null);
+	const email = useRef(null);
+	const password = useRef(null);
 
 	const toggleSignInForm = () => {
 		setIsSignInForm(!isSignInForm);
+	};
+
+	const submitClickHandler = (e) => {
+		e.preventDefault();
+		console.log(name, email);
+		const error = validateForm(
+			isSignInForm,
+			name?.current?.value,
+			email.current.value,
+			password.current.value
+		);
+		setFormError(error);
+
+		if (error) return;
+
+		// Sign In / Sign Up
 	};
 
 	return (
@@ -22,22 +44,28 @@ const Login = () => {
 				<h1 className="font-bold text-3xl mb-6">{isSignInForm ? "Sign In" : "Sign Up"}</h1>
 				{!isSignInForm && (
 					<input
+						ref={name}
 						className="p-4 my-2 w-full bg-gray-800 rounded-sm"
 						type="text"
 						placeholder="Full Name "
 					/>
 				)}
 				<input
+					ref={email}
 					className="p-4 my-2 w-full bg-gray-800 rounded-sm"
 					type="text"
 					placeholder="Email Address"
 				/>
 				<input
+					ref={password}
 					className="p-4 my-2 w-full bg-gray-800 rounded-sm"
 					type="password"
 					placeholder="Password"
 				/>
-				<button className="bg-red-600 w-full p-2 my-4 rounded-md">
+
+				<p className="p-4 text-red-500">{formError}</p>
+
+				<button onClick={submitClickHandler} className="bg-red-600 w-full p-2 my-4 rounded-md">
 					{isSignInForm ? "Sign In" : "Sign Up"}
 				</button>
 

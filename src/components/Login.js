@@ -1,5 +1,4 @@
 import React, { useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import {
 	createUserWithEmailAndPassword,
@@ -11,10 +10,10 @@ import Header from "./Header";
 import { validateForm } from "../utils/validate";
 import { auth } from "../utils/firebase";
 import { addUser } from "../redux/userSlice";
+import { USER_AVATAR_IMG_URL } from "../utils/constants";
 
 const Login = () => {
 	const dispatch = useDispatch();
-	const navigate = useNavigate();
 	const [isSignInForm, setIsSignInForm] = useState(true);
 	const [formError, setFormError] = useState(null);
 
@@ -44,7 +43,6 @@ const Login = () => {
 					// Signed in
 					// const user = userCredential.user;
 					// console.log("USER", user);
-					navigate("/browse");
 				})
 				.catch((error) => {
 					const errorCode = error.code;
@@ -59,12 +57,11 @@ const Login = () => {
 					const user = userCredential.user;
 					updateProfile(user, {
 						displayName: name.current.value,
-						// photoURL: "https://example.com/jane-q-user/profile.jpg",
+						photoURL: USER_AVATAR_IMG_URL,
 					})
 						.then(() => {
-							const { email, displayName, uid } = auth.currentUser;
-							dispatch(addUser({ email, displayName, uid }));
-							navigate("/browse");
+							const { email, displayName, uid, photoURL } = auth.currentUser;
+							dispatch(addUser({ email, displayName, uid, photoURL }));
 						})
 						.catch((error) => {
 							const errorCode = error.code;

@@ -1,23 +1,38 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { UserCircleIcon } from "@heroicons/react/24/solid";
-import { signOut } from "firebase/auth";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 
 import { auth } from "../utils/firebase";
-import { removeUser } from "../redux/userSlice";
+import { addUser, removeUser } from "../redux/userSlice";
+import { LOGO_IMG_URL } from "../utils/constants";
 
 const Header = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const user = useSelector((state) => state.user);
 
+	useEffect(() => {
+		const unSubscribe = onAuthStateChanged(auth, (user) => {
+			if (user) {
+				// User is signed in
+				const { uid, email, displayName, photoURL } = user;
+				dispatch(addUser({ uid, email, displayName, photoURL }));
+				navigate("/browse");
+			} else {
+				// User is signed out
+				dispatch(removeUser());
+				navigate("/");
+			}
+		});
+
+		return () => unSubscribe();
+	}, [dispatch, navigate]);
+
 	const handleSignOut = () => {
 		signOut(auth)
 			.then(() => {
 				// Sign-out successful.
-				dispatch(removeUser());
-				navigate("/");
 			})
 			.catch((error) => {
 				// An error happened.
@@ -27,14 +42,11 @@ const Header = () => {
 
 	return (
 		<div className="absolute w-screen py-2 px-8 bg-gradient-to-b from-black z-10 flex justify-between">
-			<img
-				className="w-44"
-				src="https://cdn.cookielaw.org/logos/dd6b162f-1a32-456a-9cfe-897231c7763c/4345ea78-053c-46d2-b11e-09adaef973dc/Netflix_Logo_PMS.png"
-				alt="netflix-logo"
-			/>
+			<img className="w-44" src={LOGO_IMG_URL} alt="netflix-logo" />
 			{user && (
 				<div className="flex flex-wrap content-center">
-					<UserCircleIcon className="w-6 h-6 text-white" />
+					{/* <UserCircleIcon className="w-6 h-6 text-white" /> */}
+					<img alt="User Logo" src={user?.photoURL} />
 					<button onClick={handleSignOut} className="ml-1 text-white font-bold">
 						Sign Out
 					</button>

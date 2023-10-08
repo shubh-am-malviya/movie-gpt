@@ -16,9 +16,11 @@ export const TMDB_API_OPTIONS = {
 export const TMDB_MOVIE_IMG_URL = "https://image.tmdb.org/t/p/w200/";
 
 export const BG_IMG_URL =
-	"https://assets.nflxext.com/ffe/siteui/vlv3/855ed6e2-d9f1-4afd-90da-96023ec747c3/85eb5b91-25ed-4965-ace9-ba8e4a0ead8d/IN-en-20230828-popsignuptwoweeks-perspective_alpha_website_large.jpg";
+	"https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2940&q=80";
 
 export const SUPPORTED_LANG = [
 	{ identifier: "en", name: "English" },
 	{ identifier: "hindi", name: "हिंदी" },
 ];
+
+export const OPEN_AI_KEY = "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";

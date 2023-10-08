@@ -10,7 +10,7 @@ import Header from "./Header";
 import { validateForm } from "../utils/validate";
 import { auth } from "../utils/firebase";
 import { addUser } from "../redux/userSlice";
-import { USER_AVATAR_IMG_URL } from "../utils/constants";
+import { BG_IMG_URL, USER_AVATAR_IMG_URL } from "../utils/constants";
 
 const Login = () => {
 	const dispatch = useDispatch();
@@ -81,11 +81,7 @@ const Login = () => {
 		<div>
 			<Header />
 			<div>
-				<img
-					className="absolute h-screen w-full"
-					src="https://assets.nflxext.com/ffe/siteui/vlv3/855ed6e2-d9f1-4afd-90da-96023ec747c3/85eb5b91-25ed-4965-ace9-ba8e4a0ead8d/IN-en-20230828-popsignuptwoweeks-perspective_alpha_website_large.jpg"
-					alt="background-img"
-				/>
+				<img className="absolute h-screen w-full" src={BG_IMG_URL} alt="background-img" />
 			</div>
 			<form className="w-1/3 p-12 my-36 absolute bg-black/80 mx-auto right-0 left-0 text-white rounded-md">
 				<h1 className="font-bold text-3xl mb-6">{isSignInForm ? "Sign In" : "Sign Up"}</h1>

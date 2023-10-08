@@ -2,15 +2,19 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import { CpuChipIcon, UserCircleIcon } from "@heroicons/react/24/outline";
 
 import { auth } from "../utils/firebase";
 import { addUser, removeUser } from "../redux/userSlice";
-import { LOGO_IMG_URL } from "../utils/constants";
+import { LOGO_IMG_URL, SUPPORTED_LANG } from "../utils/constants";
+import { toggleGptSearchView } from "../redux/gptSearchSlice";
+import { changeLanguage } from "../redux/appConfigSlice";
 
 const Header = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const user = useSelector((state) => state.user);
+	const showGptSearch = useSelector((state) => state.gptSearch.showGptSearch);
 
 	useEffect(() => {
 		const unSubscribe = onAuthStateChanged(auth, (user) => {
@@ -40,15 +44,52 @@ const Header = () => {
 			});
 	};
 
+	const handleGptSearchClick = () => {
+		dispatch(toggleGptSearchView());
+	};
+
+	const handleLanguageChange = (e) => {
+		dispatch(changeLanguage(e.target.value));
+	};
+
 	return (
 		<div className="absolute w-screen py-2 px-8 bg-gradient-to-b from-black z-10 flex justify-between">
-			<img className="w-44" src={LOGO_IMG_URL} alt="netflix-logo" />
+			<img className="w-40" src={LOGO_IMG_URL} alt="netflix-logo" />
 			{user && (
 				<div className="flex flex-wrap content-center">
-					{/* <UserCircleIcon className="w-6 h-6 text-white" /> */}
-					<img alt="User Logo" src={user?.photoURL} />
-					<button onClick={handleSignOut} className="ml-1 text-white font-bold">
-						Sign Out
+					{showGptSearch && (
+						<select
+							className="bg-gray-800 text-white rounded-md p-1 px-3"
+							onChange={handleLanguageChange}
+						>
+							{SUPPORTED_LANG.map((lang) => (
+								<option key={lang.identifier} value={lang.identifier}>
+									{lang.name}
+								</option>
+							))}
+						</select>
+					)}
+
+					<button
+						className="flex content-center bg-purple-900 hover:bg-purple-800 text-white mx-4 p-1 px-3 rounded-md"
+						onClick={handleGptSearchClick}
+					>
+						{showGptSearch ? (
+							"Homepage"
+						) : (
+							<>
+								<CpuChipIcon className="w-6 mr-1" /> GPT Search
+							</>
+						)}
+					</button>
+
+					{/* <img alt="User Logo" src={user?.photoURL} /> */}
+
+					<button
+						onClick={handleSignOut}
+						className="flex bg-black text-white p-1 px-3 font-semibolds"
+					>
+						<UserCircleIcon className="w-6 mr-1" /> Sign Out
 					</button>
 				</div>
 			)}

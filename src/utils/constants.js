@@ -23,4 +23,4 @@ export const SUPPORTED_LANG = [
 	{ identifier: "hindi", name: "हिंदी" },
 ];
 
-export const OPEN_AI_KEY = "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";
+export const OPEN_AI_KEY = "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";

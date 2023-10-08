@@ -83,8 +83,10 @@ const Login = () => {
 			<div>
 				<img className="absolute h-screen w-full" src={BG_IMG_URL} alt="background-img" />
 			</div>
-			<form className="w-1/3 p-12 my-36 absolute bg-black/80 mx-auto right-0 left-0 text-white rounded-md">
-				<h1 className="font-bold text-3xl mb-6">{isSignInForm ? "Sign In" : "Sign Up"}</h1>
+			<form className="w-full md:w-1/3 p-12 my-36 absolute bg-black/80 mx-auto right-0 left-0 text-white rounded-md">
+				<h1 className="font-bold text-2xl md:text-3xl mb-6">
+					{isSignInForm ? "Sign In" : "Sign Up"}
+				</h1>
 				{!isSignInForm && (
 					<input
 						ref={name}

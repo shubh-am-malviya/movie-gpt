@@ -6,9 +6,10 @@ import { CpuChipIcon, UserCircleIcon } from "@heroicons/react/24/outline";
 
 import { auth } from "../utils/firebase";
 import { addUser, removeUser } from "../redux/userSlice";
-import { LOGO_IMG_URL, SUPPORTED_LANG } from "../utils/constants";
+import { SUPPORTED_LANG } from "../utils/constants";
 import { toggleGptSearchView } from "../redux/gptSearchSlice";
 import { changeLanguage } from "../redux/appConfigSlice";
+import movieGptLogo from "../assets/images/Movie-GPT_Logo.png";
 
 const Header = () => {
 	const navigate = useNavigate();
@@ -56,7 +57,7 @@ const Header = () => {
 
 	return (
 		<div className="absolute w-screen py-2 px-8 bg-gradient-to-b from-black z-10 flex flex-col md:flex-row md:justify-between">
-			<img className="w-40 mx-auto md:mx-0" src={LOGO_IMG_URL} alt="netflix-logo" />
+			<img className="w-48 mx-auto md:mx-0" src={movieGptLogo} alt="movie-gpt-logo" />
 			{user && (
 				<div className="flex flex-wrap content-center">
 					{showGptSearch && (

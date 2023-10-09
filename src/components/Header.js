@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { onAuthStateChanged, signOut } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { CpuChipIcon, UserCircleIcon } from "@heroicons/react/24/outline";
 
 import { auth } from "../utils/firebase";
@@ -12,6 +12,7 @@ import { changeLanguage } from "../redux/appConfigSlice";
 
 const Header = () => {
 	const navigate = useNavigate();
+	const { pathname } = useLocation();
 	const dispatch = useDispatch();
 	const user = useSelector((state) => state.user);
 	const showGptSearch = useSelector((state) => state.gptSearch.showGptSearch);
@@ -22,7 +23,7 @@ const Header = () => {
 				// User is signed in
 				const { uid, email, displayName, photoURL } = user;
 				dispatch(addUser({ uid, email, displayName, photoURL }));
-				navigate("/browse");
+				pathname === "/" && navigate("/browse");
 			} else {
 				// User is signed out
 				dispatch(removeUser());
@@ -31,7 +32,7 @@ const Header = () => {
 		});
 
 		return () => unSubscribe();
-	}, [dispatch, navigate]);
+	}, [dispatch, navigate, pathname]);
 
 	const handleSignOut = () => {
 		signOut(auth)

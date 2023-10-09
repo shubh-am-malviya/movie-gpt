@@ -3,16 +3,25 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 import Login from "./Login";
 import Browse from "./Browse";
+import ErrorBoundary from "./ErrorBoundary";
 
 const Body = () => {
 	const appRouter = createBrowserRouter([
 		{
 			path: "/",
-			element: <Login />,
+			element: (
+				<ErrorBoundary>
+					<Login />
+				</ErrorBoundary>
+			),
 		},
 		{
 			path: "/browse",
-			element: <Browse />,
+			element: (
+				<ErrorBoundary>
+					<Browse />
+				</ErrorBoundary>
+			),
 		},
 	]);
 

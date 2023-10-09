@@ -23,4 +23,4 @@ export const SUPPORTED_LANG = [
 	{ identifier: "hindi", name: "हिंदी" },
 ];
 
-export const OPEN_AI_KEY = "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";
+export const OPEN_AI_KEY = process.env.REACT_APP_OPEN_AI_KEY;

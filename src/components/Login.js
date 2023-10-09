@@ -10,7 +10,7 @@ import Header from "./Header";
 import { validateForm } from "../utils/validate";
 import { auth } from "../utils/firebase";
 import { addUser } from "../redux/userSlice";
-import { BG_IMG_URL, USER_AVATAR_IMG_URL } from "../utils/constants";
+import { BG_IMG_URL } from "../utils/constants";
 
 const Login = () => {
 	const dispatch = useDispatch();
@@ -57,7 +57,7 @@ const Login = () => {
 					const user = userCredential.user;
 					updateProfile(user, {
 						displayName: name.current.value,
-						photoURL: USER_AVATAR_IMG_URL,
+						photoURL: null,
 					})
 						.then(() => {
 							const { email, displayName, uid, photoURL } = auth.currentUser;

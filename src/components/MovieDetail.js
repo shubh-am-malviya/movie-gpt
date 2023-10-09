@@ -1,18 +1,28 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { ArrowUturnLeftIcon } from "@heroicons/react/24/outline";
 
 import Header from "./Header";
 import { BG_IMG_URL } from "../utils/constants";
-import { useNavigate, useParams } from "react-router-dom";
 import useFetchMovieDetails from "../hooks/useFetchMovieDetails";
 import MovieDetailsVideo from "./MovieDetailsVideo";
 import MovieDetailsInfo from "./MovieDetailsInfo";
+import { removeCurrentMovieDetails, removeCurrentMovieTrailerVideo } from "../redux/moviesSlice";
 
 const MovieDetail = () => {
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
 	const { movieId } = useParams();
 
 	useFetchMovieDetails(movieId);
+
+	useEffect(() => {
+		return () => {
+			dispatch(removeCurrentMovieTrailerVideo());
+			dispatch(removeCurrentMovieDetails());
+		};
+	}, []);
 
 	const backClickHandler = () => {
 		navigate("/browse");

@@ -6,13 +6,15 @@ import { useRef } from "react";
 import openai from "../utils/openAiConfig";
 import { lang } from "../utils/langContants";
 import { TMDB_API_OPTIONS } from "../utils/constants";
-import { addGptMovieResults } from "../redux/gptSearchSlice";
+import { addGptMovieResults, clearGptMovieResults } from "../redux/gptSearchSlice";
+import GptSuggestionsShimmer from "./GptSuggestionsShimmer";
 
 const GptSearchBar = () => {
 	const dispatch = useDispatch();
 	const appLang = useSelector((state) => state.appConfig.lang);
 
 	const [gptSearchError, setGptSearchError] = useState(false);
+	const [loading, setLoading] = useState(false);
 
 	const searchText = useRef();
 
@@ -32,6 +34,9 @@ const GptSearchBar = () => {
 	const handleGptSearchClick = async () => {
 		try {
 			setGptSearchError(false);
+			setLoading(true);
+			dispatch(clearGptMovieResults());
+
 			const movieSearchQuery =
 				"Act as a Movie Recommendation system and suggest some movies for the query : " +
 				searchText.current.value +
@@ -60,6 +65,8 @@ const GptSearchBar = () => {
 			dispatch(addGptMovieResults({ movieNames: gptMovies, movieResults: filteredTmdbResults }));
 		} catch (err) {
 			setGptSearchError(true);
+		} finally {
+			setLoading(false);
 		}
 	};
 
@@ -92,6 +99,7 @@ const GptSearchBar = () => {
 					<h1 className="text-xl font-semibold">Please try again later.</h1>
 				</div>
 			)}
+			{loading && <GptSuggestionsShimmer />}
 		</>
 	);
 };
